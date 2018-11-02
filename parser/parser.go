@@ -169,12 +169,18 @@ func (p *Parser) parseExpressionStatement() *ast.ExpressionStatement{
 
 func (p *Parser) parseExpression(precedence int) ast.Expression{
   prefix := p.prefixParseFns[p.curToken.Type]
-  if prefix == nil{
-    return nil
+  if prefix != nil{
+    leftExp := prefix()
+    return leftExp
   }
-  leftExp := prefix()
+  else{
+      infix := p.infixParseFns[p.curToken.Type]
+      if infix == nil{
+        return nil
+      }else{
 
-  return leftExp
+      }
+    }
 }
 
 func (p *Parser) parseIntegerLiteral() ast.Expression{
@@ -189,4 +195,15 @@ func (p *Parser) parseIntegerLiteral() ast.Expression{
   lit.Value = value
 
   return lit
+}
+
+func (p *Parser) parsePlusExpression(left ast.Expression) ast.Expression{
+  exp := &ast.PlusExpression{Token: p.curToken}
+
+  //TODO: error処理
+
+  exp.LeftExp = left
+  exp.RightExp = left
+
+  return exp
 }

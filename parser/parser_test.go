@@ -6,6 +6,29 @@ import (
   "github.com/SahoYamaguchi/interpreter_monkey/lexer"
 )
 
+func TestExpressionStatements(t *testing.T){
+  input := `
+  1 + 2;
+  `
+
+  l := lexer.Ner(input)
+  p := New(l)
+
+  program := p.ParseProgram()
+  checkParserErrors(t,p)
+  if program == nil{
+    t.Fatalf("ParseProgram() returned nil")
+  }
+  if len(program.Statements) != 1{
+    t.Fatalf("program.Statements does not contain 3 statements. got = %d",
+      len(program.Statements))
+  }
+
+  tests := []struct{
+    //TODO:埋める
+  }
+}
+
 func TestLetStatements(t *testing.T){
   input := `
   let x = 5;

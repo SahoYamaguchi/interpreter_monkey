@@ -121,3 +121,16 @@ func (es *ExpressionStatement) String() string{
 }
 
 func (i *Identifier) String() string { return i.Value }
+
+type PlusExpression struct{
+  Token token.Token //式の最初のトークン
+  LeftExp Expression
+  RightExp Expression
+}
+
+func (pe *PlusExpression) statementNode() {}
+func (pe *PlusExpression) TokenLiteral() string{ return pe.Token.Literal }
+
+func (pe *PlusExpression) String() string{
+  return fmt.Sprintf("%V + %V", LeftExp, RightExp)
+}
