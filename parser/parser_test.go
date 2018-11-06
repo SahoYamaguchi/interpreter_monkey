@@ -2,6 +2,7 @@ package parser
 
 import (
   "testing"
+  "fmt"
   "github.com/SahoYamaguchi/interpreter_monkey/ast"
   "github.com/SahoYamaguchi/interpreter_monkey/lexer"
 )
@@ -11,7 +12,7 @@ func TestExpressionStatements(t *testing.T){
   1 + 2;
   `
 
-  l := lexer.Ner(input)
+  l := lexer.New(input)
   p := New(l)
 
   program := p.ParseProgram()
@@ -24,9 +25,9 @@ func TestExpressionStatements(t *testing.T){
       len(program.Statements))
   }
 
-  tests := []struct{
-    //TODO:埋める
-  }
+  // for _, s := range program.Statements {
+  //      fmt.Printf("%+v\n", s)
+  //  }
 }
 
 func TestLetStatements(t *testing.T){

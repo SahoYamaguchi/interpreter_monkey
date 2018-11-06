@@ -2,6 +2,7 @@ package ast
 
 import ( "github.com/SahoYamaguchi/interpreter_monkey/token"
   "bytes"
+  "fmt"
 )
 
 type Node interface{
@@ -81,7 +82,10 @@ type IntegerLiteral struct{
 
 func (il *IntegerLiteral) expressionNode() {}
 func (il *IntegerLiteral) TokenLiteral() string {return il.Token.Literal}
-func (il *IntegerLiteral) String() string {return il.Token.Literal}
+func (il *IntegerLiteral) String() string {
+  // return il.Token.Literal
+  return fmt.Sprintf("{\"IntegerLiteral\":%v}", il.Token.Literal)
+}
 
 func(ls *LetStatement) String() string{
   var out bytes.Buffer
@@ -128,9 +132,10 @@ type PlusExpression struct{
   RightExp Expression
 }
 
-func (pe *PlusExpression) statementNode() {}
+func (pe *PlusExpression) expressionNode() {}
 func (pe *PlusExpression) TokenLiteral() string{ return pe.Token.Literal }
 
 func (pe *PlusExpression) String() string{
-  return fmt.Sprintf("%V + %V", LeftExp, RightExp)
+  // return fmt.Sprintf("%V + %V", LeftExp, RightExp)
+   return fmt.Sprintf("{\"PlusExpression\":{\"leftExp\":%+v, \"rightExp\":%+v}}", pe.LeftExp, pe.RightExp)
 }

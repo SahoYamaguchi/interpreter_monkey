@@ -44,6 +44,10 @@ func New(l *lexer.Lexer) *Parser{
   p.registerPrefix(token.IDENT, p.parseIdentifier)
   p.registerPrefix(token.INT, p.parseIntegerLiteral)
 
+  p.infixParseFns = make(map[token.TokenType]infixParseFn)
+  p.registerInfix(token.PLUS, p.parsePlusExpression)
+
+
   //curToken と　peekTokenのセット
   p.nextToken()
   p.nextToken()
@@ -171,16 +175,16 @@ func (p *Parser) parseExpression(precedence int) ast.Expression{
   prefix := p.prefixParseFns[p.curToken.Type]
   if prefix != nil{
     leftExp := prefix()
-    return leftExp
-  }
-  else{
-      infix := p.infixParseFns[p.curToken.Type]
-      if infix == nil{
-        return nil
-      }else{
-
-      }
+    if p.peekTokenIs(token.SEMICOLON){
+      return leftExp
+    }else{
+      p.nextToken()
+      infix := p.infixParseFns[p.curToken.Type](leftExp)
+      return infix
     }
+  }else{
+    return nil
+  }
 }
 
 func (p *Parser) parseIntegerLiteral() ast.Expression{
@@ -203,7 +207,8 @@ func (p *Parser) parsePlusExpression(left ast.Expression) ast.Expression{
   //TODO: error処理
 
   exp.LeftExp = left
-  exp.RightExp = left
+  p.nextToken()
+  exp.RightExp = p.parseExpression(LOWEST)
 
   return exp
 }
