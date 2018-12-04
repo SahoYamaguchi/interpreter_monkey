@@ -187,6 +187,17 @@ func (p *Parser) parseExpression(precedence int) ast.Expression{
   }
 }
 
+func (p *Parser) peekTokenPriority() int { ///precedenceを計算する：高い方からexpressionを作っていくコードをかく
+	switch p.peekToken.Type {
+	case token.PLUS:
+		return SUM
+	case token.ASTERISK:
+		return PRODUCT
+	default:
+		return LOWEST
+	}
+}
+
 func (p *Parser) parseIntegerLiteral() ast.Expression{
   lit := &ast.IntegerLiteral{Token: p.curToken}
 
